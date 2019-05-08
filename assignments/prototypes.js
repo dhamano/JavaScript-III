@@ -159,14 +159,16 @@ Humanoid.prototype.greet = function greet() {
   Villain.prototype.assault = function assault(obj, damage) {
     obj.healthPoints -= damage;
     if(obj.healthPoints <= 0) {
-      return ( [ `${obj.name} takes fatal damage!`,obj.destroy()] );
+      return ( [ `${obj.name} has been murdered!`,obj.destroy()] );
     } else {
       if(damage < 0) {
         return ( `${obj.name} is healed for ${damage} hit points.` );
       } else if ( damage === 0 ) {
         return ( `${obj.name} dodges and takes no damage!` );
+      } else if (damage === 1) {
+        return ( `${obj.name} is assailed for ${damage} point of damage.` );
       } else {
-        return ( `${obj.name} takes ${damage} points of damage.` );
+        return ( `${obj.name} is assailed for ${damage} points of damage.` );
       }
     }
   }
@@ -182,9 +184,11 @@ Humanoid.prototype.greet = function greet() {
       if(damage < 0) {
         return ( `${obj.name} is healed for ${damage} hit points.` );
       } else if ( damage === 0 ) {
-        return ( `${obj.name} dodges and takes no damage!` );
+        return ( `${obj.name} parries and takes no damage!` );
+      } else if (damage === 1) {
+        return ( `${obj.name} is wounded for ${damage} point of damage.` );
       } else {
-        return ( `${obj.name} takes ${damage} points of damage.` );
+        return ( `${obj.name} is wounded for ${damage} points of damage.` );
       }
     }
   }
@@ -223,8 +227,10 @@ Humanoid.prototype.greet = function greet() {
   });
 
   console.log(villan.assault(mage, 1));
+  console.log(villan.assault(mage, 2));
   console.log(villan.assault(archer, 0));
   console.log(villan.assault(swordsman, 15));
   console.log(hero.attack(villan, 1));
+  console.log(hero.attack(villan, 3));
   console.log(hero.attack(villan, 0));
   console.log(hero.attack(villan, 15));
