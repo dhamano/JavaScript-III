@@ -148,5 +148,83 @@ Humanoid.prototype.greet = function greet() {
 
   // Stretch task: 
   // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.  
-  // * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
+  // * Give the Hero and Villains different methods that could be used to remove
+   //  health points from objects which could result in destruction if health gets to 0 or drops below 0;
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
+  function Villain(attrs) {
+    Humanoid.call(this, attrs),
+    this.isVillan = attrs.isVillan
+  }
+  Villain.prototype = Object.create(Humanoid.prototype);
+  Villain.prototype.assault = function assault(obj, damage) {
+    obj.healthPoints -= damage;
+    if(obj.healthPoints <= 0) {
+      return ( [ `${obj.name} takes fatal damage!`,obj.destroy()] );
+    } else {
+      if(damage < 0) {
+        return ( `${obj.name} is healed for ${damage} hit points.` );
+      } else if ( damage === 0 ) {
+        return ( `${obj.name} dodges and takes no damage!` );
+      } else {
+        return ( `${obj.name} takes ${damage} points of damage.` );
+      }
+    }
+  }
+  function Hero(attrs) {
+    Humanoid.call(this, attrs),
+    this.isHero = attrs.isHero
+  }
+  Hero.prototype.attack = function attack(obj, damage) {
+    obj.healthPoints -= damage;
+    if(obj.healthPoints <= 0) {
+      return ( [ `${obj.name} takes fatal damage!`,obj.destroy()] );
+    } else {
+      if(damage < 0) {
+        return ( `${obj.name} is healed for ${damage} hit points.` );
+      } else if ( damage === 0 ) {
+        return ( `${obj.name} dodges and takes no damage!` );
+      } else {
+        return ( `${obj.name} takes ${damage} points of damage.` );
+      }
+    }
+  }
+
+  const villan = new Villain({
+    createdAt: new Date(),
+    dimensions: {
+      length: 1,
+      width: 2,
+      height: 4,
+    },
+    healthPoints: 10,
+    name: 'The Six Fingered Man',
+    team: 'Kingdom of Florin',
+    weapons: [
+      'Rapier',
+      'Throwing Dagger',
+    ],
+    language: 'Common Tongue',
+  });
+
+  const hero = new Hero({
+    createdAt: new Date(),
+    dimensions: {
+      length: 1,
+      width: 2,
+      height: 4,
+    },
+    healthPoints: 10,
+    name: 'Westley',
+    team: 'Florin',
+    weapons: [
+      'Rapier'
+    ],
+    language: 'Common Tongue',
+  });
+
+  console.log(villan.assault(mage, 1));
+  console.log(villan.assault(archer, 0));
+  console.log(villan.assault(swordsman, 15));
+  console.log(hero.attack(villan, 1));
+  console.log(hero.attack(villan, 0));
+  console.log(hero.attack(villan, 15));
