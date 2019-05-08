@@ -24,9 +24,9 @@
   * destroy() // prototype method that returns: `${this.name} was removed from the game.`
 */
 function GameObject(attrs) {
-  this.createdAt = attrs.createdAt,
-  this.name = attrs.name,
-  this.dimensions = attrs.dimensions
+  this.createdAt = attrs.createdAt;
+  this.name = attrs.name;
+  this.dimensions = attrs.dimensions;
 }
 GameObject.prototype.destroy = function destroy() {
   return `${this.name} was removed from the game.`;
@@ -40,7 +40,7 @@ GameObject.prototype.destroy = function destroy() {
   * should inherit destroy() from GameObject's prototype
 */
 function CharacterStats(attrs) {
-  GameObject.call(this, attrs),
+  GameObject.call(this, attrs);
   this.healthPoints = attrs.healthPoints;
 }
 CharacterStats.prototype = Object.create(GameObject.prototype);
@@ -62,10 +62,10 @@ CharacterStats.prototype.takeDamage = function takeDamage() {
   * should inherit takeDamage() from CharacterStats
 */
 function Humanoid(attrs) {
-  CharacterStats.call(this, attrs),
-  this.team = attrs.team,
-  this.weapons = attrs.weapons,
-  this.language = attrs.language
+  CharacterStats.call(this, attrs);
+  this.team = attrs.team;
+  this.weapons = attrs.weapons;
+  this.language = attrs.languag;
 }
 Humanoid.prototype = Object.create(CharacterStats.prototype);
 Humanoid.prototype.greet = function greet() {
@@ -151,19 +151,24 @@ Humanoid.prototype.greet = function greet() {
   // * Give the Hero and Villains different methods that could be used to remove
    //  health points from objects which could result in destruction if health gets to 0 or drops below 0;
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
+
+  function determineDamager(target, multiplier) {
+    let damage = Math.floor(Math.random() * Math.floor(target.healthPoints+5));
+    return ( Math.ceil(damage * multiplier));
+  }
+
   function Villain(attrs) {
-    Humanoid.call(this, attrs),
-    this.isVillan = attrs.isVillan
+    Humanoid.call(this, attrs);
+    this.isVillan = attrs.isVillan;
   }
   Villain.prototype = Object.create(Humanoid.prototype);
-  Villain.prototype.assault = function assault(obj, damage) {
+  Villain.prototype.assault = function attack(obj) {
+    let damage = determineDamager(obj, .8);
     obj.healthPoints -= damage;
     if(obj.healthPoints <= 0) {
       return ( [ `${this.name} murders ${obj.name}!`,obj.destroy()] );
     } else {
-      if(damage < 0) {
-        return ( `${obj.name} is healed for ${damage} hit points.` );
-      } else if ( damage === 0 ) {
+      if ( damage <= 0 ) {
         return ( `${this.name} stubs his toe and curses!` );
       } else if (damage === 1) {
         return ( `${obj.name} is assailed for ${damage} point of damage.` );
@@ -173,17 +178,16 @@ Humanoid.prototype.greet = function greet() {
     }
   }
   function Hero(attrs) {
-    Humanoid.call(this, attrs),
-    this.isHero = attrs.isHero
+    Humanoid.call(this, attrs);
+    this.isHero = attrs.isHero;
   }
-  Hero.prototype.attack = function attack(obj, damage) {
+  Hero.prototype.attack = function attack(obj) {
+    let damage = determineDamager(obj, 0.2);
     obj.healthPoints -= damage;
     if(obj.healthPoints <= 0) {
       return ( [ `${this.name} defeats ${obj.name}!`, obj.destroy()] );
     } else {
-      if(damage < 0) {
-        return ( `${obj.name} is healed for ${damage} hit points.` );
-      } else if ( damage === 0 ) {
+      if ( damage <= 0 ) {
         return ( `${this.name} slips and falls!` );
       } else if (damage === 1) {
         return ( `${obj.name} is wounded for ${damage} point of damage.` );
@@ -226,11 +230,11 @@ Humanoid.prototype.greet = function greet() {
     language: 'Common Tongue',
   });
 
-  console.log(necromancer.assault(mage, 1));
-  console.log(necromancer.assault(mage, 2));
-  console.log(necromancer.assault(archer, 0));
-  console.log(necromancer.assault(swordsman, 15));
-  console.log(paladin.attack(necromancer, 1));
-  console.log(paladin.attack(necromancer, 3));
-  console.log(paladin.attack(necromancer, 0));
-  console.log(paladin.attack(necromancer, 15));
+  console.log(necromancer.assault(paladin));
+  console.log(necromancer.assault(mage));
+  console.log(necromancer.assault(archer));
+  console.log(necromancer.assault(swordsman));
+  console.log(paladin.attack(necromancer));
+  console.log(paladin.attack(mage));
+  console.log(paladin.attack(archer));
+  console.log(paladin.attack(swordsman));
