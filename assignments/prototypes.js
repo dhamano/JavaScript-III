@@ -28,7 +28,7 @@ function GameObject(attrs) {
   this.name = attrs.name;
   this.dimensions = attrs.dimensions;
 }
-GameObject.prototype.destroy = function destroy() {
+GameObject.prototype.destroy = function() {
   return `${this.name} was removed from the game.`;
 }
 
@@ -44,7 +44,7 @@ function CharacterStats(attrs) {
   this.healthPoints = attrs.healthPoints;
 }
 CharacterStats.prototype = Object.create(GameObject.prototype);
-CharacterStats.prototype.takeDamage = function takeDamage() {
+CharacterStats.prototype.takeDamage = function() {
   return `${this.name} took damage.`;
 }
 
@@ -68,7 +68,7 @@ function Humanoid(attrs) {
   this.language = attrs.languag;
 }
 Humanoid.prototype = Object.create(CharacterStats.prototype);
-Humanoid.prototype.greet = function greet() {
+Humanoid.prototype.greet = function() {
   return `${this.name} offers a greeting in ${this.language}.`;
 }
  
@@ -152,9 +152,9 @@ Humanoid.prototype.greet = function greet() {
    //  health points from objects which could result in destruction if health gets to 0 or drops below 0;
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
 
-  function determineDamager(target, multiplier) {
-    let damage = Math.floor(Math.random() * Math.floor(target.healthPoints+5));
-    return ( Math.ceil(damage * multiplier));
+  function determineDamager(target) {
+    let damage = Math.floor(Math.random() * Math.ceil(target.healthPoints+1));
+    return ( Math.ceil(damage) );
   }
 
   function Villain(attrs) {
@@ -163,38 +163,25 @@ Humanoid.prototype.greet = function greet() {
   }
   Villain.prototype = Object.create(Humanoid.prototype);
   Villain.prototype.assault = function attack(obj) {
-    let damage = determineDamager(obj, .8);
+    let damage = determineDamager(obj);
     obj.healthPoints -= damage;
-    if(obj.healthPoints <= 0) {
-      return ( [ `${this.name} murders ${obj.name}!`,obj.destroy()] );
-    } else {
-      if ( damage <= 0 ) {
-        return ( `${this.name} stubs his toe and curses!` );
-      } else if (damage === 1) {
-        return ( `${obj.name} is assailed for ${damage} point of damage.` );
-      } else {
-        return ( `${obj.name} is assailed for ${damage} points of damage.` );
-      }
-    }
+    if(obj.healthPoints <= 0) { return ( [ `${this.name} murders ${obj.name}!`, obj.destroy() ] ); }
+    if ( damage <= 0 ) { return ( `${this.name} stubs his toe and curses!` ); }
+    if (damage === 1) { return ( `${obj.name} is assailed for ${damage} point of damage.` ); }
+    return ( `${obj.name} is assailed for ${damage} points of damage.` );
   }
   function Hero(attrs) {
     Humanoid.call(this, attrs);
     this.isHero = attrs.isHero;
   }
+  Hero.prototype = Object.create(Humanoid.prototype);
   Hero.prototype.attack = function attack(obj) {
-    let damage = determineDamager(obj, 0.2);
+    let damage = determineDamager(obj);
     obj.healthPoints -= damage;
-    if(obj.healthPoints <= 0) {
-      return ( [ `${this.name} defeats ${obj.name}!`, obj.destroy()] );
-    } else {
-      if ( damage <= 0 ) {
-        return ( `${this.name} slips and falls!` );
-      } else if (damage === 1) {
-        return ( `${obj.name} is wounded for ${damage} point of damage.` );
-      } else {
-        return ( `${obj.name} is wounded for ${damage} points of damage.` );
-      }
-    }
+    if(obj.healthPoints <= 0) { return ( [ `${this.name} murders ${obj.name}!`, obj.destroy() ] ); }
+    if ( damage <= 0 ) { return ( `${this.name} stubs his toe and curses!` ); }
+    if ( damage === 1) { return ( `${obj.name} is assailed for ${damage} point of damage.` ); }
+    return ( `${obj.name} is assailed for ${damage} points of damage.` );
   }
 
   const necromancer = new Villain({
@@ -204,7 +191,7 @@ Humanoid.prototype.greet = function greet() {
       width: 2,
       height: 4,
     },
-    healthPoints: 10,
+    healthPoints: 50,
     name: 'The Six Fingered Man',
     team: 'Kingdom of Florin',
     weapons: [
@@ -221,7 +208,7 @@ Humanoid.prototype.greet = function greet() {
       width: 2,
       height: 4,
     },
-    healthPoints: 10,
+    healthPoints: 50,
     name: 'Westley',
     team: 'Florin',
     weapons: [
@@ -231,10 +218,13 @@ Humanoid.prototype.greet = function greet() {
   });
 
   console.log(necromancer.assault(paladin));
-  console.log(necromancer.assault(mage));
-  console.log(necromancer.assault(archer));
-  console.log(necromancer.assault(swordsman));
-  console.log(paladin.attack(necromancer));
-  console.log(paladin.attack(mage));
-  console.log(paladin.attack(archer));
-  console.log(paladin.attack(swordsman));
+  console.log(necromancer.assault(paladin));
+  console.log(necromancer.assault(paladin));
+  console.log(necromancer.assault(paladin));
+  // console.log(necromancer.assault(mage));
+  // console.log(necromancer.assault(archer));
+  // console.log(necromancer.assault(swordsman));
+  // console.log(paladin.attack(necromancer));
+  // console.log(paladin.attack(mage));
+  // console.log(paladin.attack(archer));
+  // console.log(paladin.attack(swordsman));
