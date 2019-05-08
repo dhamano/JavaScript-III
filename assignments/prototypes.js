@@ -178,10 +178,10 @@ Humanoid.prototype.greet = function() {
   Hero.prototype.attack = function attack(obj) {
     let damage = determineDamager(obj);
     obj.healthPoints -= damage;
-    if(obj.healthPoints <= 0) { return ( [ `${this.name} murders ${obj.name}!`, obj.destroy() ] ); }
-    if ( damage <= 0 ) { return ( `${this.name} stubs his toe and curses!` ); }
-    if ( damage === 1) { return ( `${obj.name} is assailed for ${damage} point of damage.` ); }
-    return ( `${obj.name} is assailed for ${damage} points of damage.` );
+    if(obj.healthPoints <= 0) { return ( [ `${this.name} defeats ${obj.name}!`, obj.destroy() ] ); }
+    if ( damage <= 0 ) { return ( `${this.name} slips and falls!` ); }
+    if ( damage === 1) { return ( `${obj.name} is hit for ${damage} point of damage.` ); }
+    return ( `${obj.name} is hit for ${damage} points of damage.` );
   }
 
   const necromancer = new Villain({
@@ -218,13 +218,10 @@ Humanoid.prototype.greet = function() {
   });
 
   console.log(necromancer.assault(paladin));
-  console.log(necromancer.assault(paladin));
-  console.log(necromancer.assault(paladin));
-  console.log(necromancer.assault(paladin));
-  // console.log(necromancer.assault(mage));
-  // console.log(necromancer.assault(archer));
-  // console.log(necromancer.assault(swordsman));
-  // console.log(paladin.attack(necromancer));
-  // console.log(paladin.attack(mage));
-  // console.log(paladin.attack(archer));
-  // console.log(paladin.attack(swordsman));
+  console.log(necromancer.assault(mage));
+  console.log(necromancer.assault(archer));
+  console.log(necromancer.assault(swordsman));
+  console.log(paladin.attack(necromancer));
+  console.log(paladin.attack(mage));
+  console.log(paladin.attack(archer));
+  console.log(paladin.attack(swordsman));
