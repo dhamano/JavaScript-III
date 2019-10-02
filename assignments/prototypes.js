@@ -1,47 +1,89 @@
 /*
-  Object oriented design is commonly used in video games.  For this part of the assignment you will be implementing several constructor functions with their correct inheritance hierarchy.
+  Object oriented design is commonly used in video games.
+  For this part of the assignment you will be implementing
+  several constructor functions with their correct inheritance
+  hierarchy.
 
-  In this file you will be creating three constructor functions: GameObject, CharacterStats, Humanoid.  
+  In this file you will be creating three constructor
+  functions: GameObject, CharacterStats, Humanoid.  
 
-  At the bottom of this file are 3 objects that all end up inheriting from Humanoid.  Use the objects at the bottom of the page to test your constructor functions.
+  At the bottom of this file are 3 objects that all end up
+  inheriting from Humanoid.  Use the objects at the bottom
+  of the page to test your constructor functions.
   
-  Each constructor function has unique properties and methods that are defined in their block comments below:
+  Each constructor function has unique properties and methods
+  that are defined in their block comments below:
 */
   
 /*
   === GameObject ===
   * createdAt
   * name
-  * dimensions (These represent the character's size in the video game)
+  * dimensions (These represent the character's size
+  * in the videogame)
   * destroy() // prototype method that returns: `${this.name} was removed from the game.`
 */
+function GameObject(attrs) {
+  this.createdAt = attrs.createdAt,
+  this.name = attrs.name,
+  this.dimensions = attrs.dimensions
+}
+GameObject.prototype.destroy = function destroy() {
+  return `${this.name} was removed from the game.`;
+}
 
 /*
   === CharacterStats ===
   * healthPoints
-  * takeDamage() // prototype method -> returns the string '<object name> took damage.'
+  * takeDamage() // prototype method ->
+  * returns the string'<object name> took damage.'
   * should inherit destroy() from GameObject's prototype
 */
+function CharacterStats(attrs) {
+  GameObject.call(this, attrs),
+  this.healthPoints = attrs.healthPoints;
+}
+CharacterStats.prototype = Object.create(GameObject.prototype);
+CharacterStats.prototype.takeDamage = function takeDamage() {
+  return `${this.name} took damage.`;
+}
 
 /*
-  === Humanoid (Having an appearance or character resembling that of a human.) ===
+  === Humanoid (Having an appearance or character resembling
+    that of a human.) ===
   * team
   * weapons
   * language
-  * greet() // prototype method -> returns the string '<object name> offers a greeting in <object language>.'
-  * should inherit destroy() from GameObject through CharacterStats
+  * greet() // prototype method ->
+  * returns the string '<object name> offers a greeting in
+  * <object language>.'
+  * should inherit destroy() from GameObject through
+  * CharacterStats
   * should inherit takeDamage() from CharacterStats
 */
+function Humanoid(attrs) {
+  CharacterStats.call(this, attrs),
+  this.team = attrs.team,
+  this.weapons = attrs.weapons,
+  this.language = attrs.language
+}
+Humanoid.prototype = Object.create(CharacterStats.prototype);
+Humanoid.prototype.greet = function greet() {
+  return `${this.name} offers a greeting in ${this.language}.`;
+}
  
 /*
   * Inheritance chain: GameObject -> CharacterStats -> Humanoid
-  * Instances of Humanoid should have all of the same properties as CharacterStats and GameObject.
-  * Instances of CharacterStats should have all of the same properties as GameObject.
+  * Instances of Humanoid should have all of the same
+  * properties as CharacterStats and GameObject.
+  * Instances of CharacterStats should have all of the same
+  * properties as GameObject.
 */
 
-// Test you work by un-commenting these 3 objects and the list of console logs below:
+// Test you work by un-commenting these 3 objects and the
+// list of console logs below:
 
-/*
+///*
   const mage = new Humanoid({
     createdAt: new Date(),
     dimensions: {
@@ -102,7 +144,7 @@
   console.log(archer.greet()); // Lilith offers a greeting in Elvish.
   console.log(mage.takeDamage()); // Bruce took damage.
   console.log(swordsman.destroy()); // Sir Mustachio was removed from the game.
-*/
+//*/
 
   // Stretch task: 
   // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.  
