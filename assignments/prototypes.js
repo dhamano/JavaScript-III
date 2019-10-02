@@ -24,11 +24,11 @@
   * destroy() // prototype method that returns: `${this.name} was removed from the game.`
 */
 function GameObject(attrs) {
-  this.createdAt = attrs.createdAt,
-  this.name = attrs.name,
-  this.dimensions = attrs.dimensions
+  this.createdAt = attrs.createdAt;
+  this.name = attrs.name;
+  this.dimensions = attrs.dimensions;
 }
-GameObject.prototype.destroy = function destroy() {
+GameObject.prototype.destroy = function() {
   return `${this.name} was removed from the game.`;
 }
 
@@ -40,11 +40,11 @@ GameObject.prototype.destroy = function destroy() {
   * should inherit destroy() from GameObject's prototype
 */
 function CharacterStats(attrs) {
-  GameObject.call(this, attrs),
+  GameObject.call(this, attrs);
   this.healthPoints = attrs.healthPoints;
 }
 CharacterStats.prototype = Object.create(GameObject.prototype);
-CharacterStats.prototype.takeDamage = function takeDamage() {
+CharacterStats.prototype.takeDamage = function() {
   return `${this.name} took damage.`;
 }
 
@@ -62,13 +62,13 @@ CharacterStats.prototype.takeDamage = function takeDamage() {
   * should inherit takeDamage() from CharacterStats
 */
 function Humanoid(attrs) {
-  CharacterStats.call(this, attrs),
-  this.team = attrs.team,
-  this.weapons = attrs.weapons,
-  this.language = attrs.language
+  CharacterStats.call(this, attrs);
+  this.team = attrs.team;
+  this.weapons = attrs.weapons;
+  this.language = attrs.languag;
 }
 Humanoid.prototype = Object.create(CharacterStats.prototype);
-Humanoid.prototype.greet = function greet() {
+Humanoid.prototype.greet = function() {
   return `${this.name} offers a greeting in ${this.language}.`;
 }
  
@@ -148,5 +148,80 @@ Humanoid.prototype.greet = function greet() {
 
   // Stretch task: 
   // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.  
-  // * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
+  // * Give the Hero and Villains different methods that could be used to remove
+   //  health points from objects which could result in destruction if health gets to 0 or drops below 0;
   // * Create two new objects, one a villain and one a hero and fight it out with methods!
+
+  function determineDamager(target) {
+    let damage = Math.floor(Math.random() * Math.ceil(target.healthPoints+1));
+    return ( Math.ceil(damage) );
+  }
+
+  function Villain(attrs) {
+    Humanoid.call(this, attrs);
+    this.isVillan = attrs.isVillan;
+  }
+  Villain.prototype = Object.create(Humanoid.prototype);
+  Villain.prototype.assault = function attack(obj) {
+    let damage = determineDamager(obj);
+    obj.healthPoints -= damage;
+    if(obj.healthPoints <= 0) { return ( [ `${this.name} murders ${obj.name}!`, obj.destroy() ] ); }
+    if ( damage <= 0 ) { return ( `${this.name} stubs his toe and curses!` ); }
+    if (damage === 1) { return ( `${obj.name} is assailed for ${damage} point of damage.` ); }
+    return ( `${obj.name} is assailed for ${damage} points of damage.` );
+  }
+  function Hero(attrs) {
+    Humanoid.call(this, attrs);
+    this.isHero = attrs.isHero;
+  }
+  Hero.prototype = Object.create(Humanoid.prototype);
+  Hero.prototype.attack = function attack(obj) {
+    let damage = determineDamager(obj);
+    obj.healthPoints -= damage;
+    if(obj.healthPoints <= 0) { return ( [ `${this.name} defeats ${obj.name}!`, obj.destroy() ] ); }
+    if ( damage <= 0 ) { return ( `${this.name} slips and falls!` ); }
+    if ( damage === 1) { return ( `${obj.name} is hit for ${damage} point of damage.` ); }
+    return ( `${obj.name} is hit for ${damage} points of damage.` );
+  }
+
+  const necromancer = new Villain({
+    createdAt: new Date(),
+    dimensions: {
+      length: 1,
+      width: 2,
+      height: 4,
+    },
+    healthPoints: 50,
+    name: 'The Six Fingered Man',
+    team: 'Kingdom of Florin',
+    weapons: [
+      'Rapier',
+      'Throwing Dagger',
+    ],
+    language: 'Common Tongue',
+  });
+
+  const paladin = new Hero({
+    createdAt: new Date(),
+    dimensions: {
+      length: 1,
+      width: 2,
+      height: 4,
+    },
+    healthPoints: 50,
+    name: 'Westley',
+    team: 'Florin',
+    weapons: [
+      'Rapier'
+    ],
+    language: 'Common Tongue',
+  });
+
+  console.log(necromancer.assault(paladin));
+  console.log(necromancer.assault(mage));
+  console.log(necromancer.assault(archer));
+  console.log(necromancer.assault(swordsman));
+  console.log(paladin.attack(necromancer));
+  console.log(paladin.attack(mage));
+  console.log(paladin.attack(archer));
+  console.log(paladin.attack(swordsman));
